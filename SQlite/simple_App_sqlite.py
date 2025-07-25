@@ -57,12 +57,35 @@ def search_contact():
 
 
 def update_info():
-    cursor.execute()
+    id = int(input("Enter the id whose info you want to update : "))
+    cursor.execute("select * from Students where id = ?", (id,))
+    data = cursor.fetchone()
+    if data:
+        name = input("Enter new name: ")
+        gender = input("Enter new gender (M/F): ")
+        age = int(input("Enter new age: "))
+        phone = int(input("Enter new phone number: "))
+        email = input("Enter new email: ")
 
+        cursor.execute(
+            "update Students set name = ?, gender = ?, age = ?, phone = ?, email = ? where id = ?",
+            (name, gender, age, phone, email, id),
+        )
+        conn.commit()
+        print("👍 Information Updated \n")
+    else:
+        print("No contact found.")
 
 def delete_info():
-    cursor.execute()
-
+    id = int(input("Enter the id of the contact you want to delete: "))
+    cursor.execute("select * from Students where id = ?", (id,))
+    data = cursor.fetchone()
+    if data:
+        cursor.execute("delete from Students where id = ?", (id,))
+        conn.commit()
+        print("Contact deleted successfully.")
+    else:
+        print("No contact found.")
 
 # Menu
 while True:
